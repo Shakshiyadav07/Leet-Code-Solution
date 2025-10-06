@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+// Hash map entry
+typedef struct {
+    int remainder;
+    int index;
+} Entry;
+
+// Comparison function for qsort and bsearch
+int cmp(const void* a, const void* b) {
+    int x = ((Entry*)a)->remainder;
+    int y = ((Entry*)b)->remainder;
+    return (x > y) - (x < y);
+}
+
+bool checkSubarraySum(int* nums, int numsSize, int k) {
+    // dynamic array for (remainder, index)
+    Entry* seen = (Entry*)malloc(sizeof(Entry) * (numsSize + 1));
+    int seenCount = 0;
+
+    long long prefixSum = 0;
+    seen[seenCount++] = (Entry){0, -1}; // remainder 0 at index -1
+
+    for (int i = 0; i < numsSize; i++) {
+        prefixSum += nums[i];
+        int rem = prefixSum % k;
+        if (rem < 0) rem += k;
+
+        // search for remainder in seen[]
+        Entry key = {rem, 0};
+        Entry* found = bsearch(&key, seen, seenCount, sizeof(Entry), cmp);
+
+        if (found) {
+            if (i - found->index > 1) {
+                free(seen);
+                return true;
+            }
+        } else {
+            seen[seenCount++] = (Entry){rem, i};
+            qsort(seen, seenCount, sizeof(Entry), cmp);
+        }
+    }
+
+    free(seen);
+    return false;
+}
