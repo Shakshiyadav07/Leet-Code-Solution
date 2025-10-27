@@ -1,0 +1,23 @@
+#include <vector>
+#include <climits>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    int minStartValue(vector<int>& nums) {
+        
+        int prefixsum = 0;
+        int minPrefix = 0;   // fixed name to match below use
+
+        for (int x : nums) {
+            prefixsum += x;
+            minPrefix = min(minPrefix, prefixsum);  // fixed variable name
+        }
+
+        if (minPrefix < 0)
+            return 1 - minPrefix;
+        else
+            return 1;
+    }
+};
