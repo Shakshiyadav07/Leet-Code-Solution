@@ -1,0 +1,17 @@
+char nextGreatestLetter(char* letters, int lettersSize, char target) {
+    int low = 0, high = lettersSize - 1;
+    char result = letters[0]; // Default to the first letter (wrap-around case)
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+
+        if (letters[mid] > target) {
+            result = letters[mid];  // Possible answer
+            high = mid - 1;         // Try to find smaller valid letter
+        } else {
+            low = mid + 1;          // Move right
+        }
+    }
+
+    return result;
+}
