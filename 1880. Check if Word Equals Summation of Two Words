@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int getValue(string s) {
+        int value = 0;
+        for (char c : s) {
+            value = value * 10 + (c - 'a');  // build number digit by digit
+        }
+        return value;
+    }
+
+    bool isSumEqual(string firstWord, string secondWord, string targetWord) {
+        return getValue(firstWord) + getValue(secondWord) == getValue(targetWord);
+    }
+};
